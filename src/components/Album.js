@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-
 import albumData from './../data/albums';
+import PlayerBar from './PlayerBar';
 
 
 class Album extends Component {
@@ -34,14 +34,21 @@ class Album extends Component {
       this.audioElement.src = song.audioSrc;
       this.setState({ currentSong: song });
     }
-    handleSongClick(song) {
+    handleSongClick(song,index) {
        const isSameSong = this.state.currentSong === song;
+       this.setState({ activeSongIndex: index });
+
        if (this.state.isPlaying && isSameSong) {
          this.pause();
             } else {
-              if (!isSameSong) { this.setSong(song); }
+
+              if (!isSameSong) {
+                this.setSong(song);
+               }
                 this.play();
-   }
+
+ }
+
  }
     onMouseEnter (index) {
         this.setState({isHovered:index});
@@ -50,8 +57,28 @@ class Album extends Component {
         this.setState ({isHovered: false});
     }
 
+      handlePrevClick() {
+          const currentIndex = this.state.album.songs.findIndex(
+            song => this.state.currentSong === song);
+          const newIndex = Math.max(0, currentIndex - 1);
+          const newSong = this.state.album.songs[newIndex];
+            this.setSong(newSong);
+            this.play();
+        }
+    handleNextClick() {
+          const currentIndex = this.state.album.songs.findIndex(
+            song => this.state.currentSong === song);
+          const totalSongs=this.state.album.songs;
+          const newIndex = Math.min(totalSongs.length -1, currentIndex + 1);
+          const newSong = this.state.album.songs[newIndex];
+            this.setSong(newSong);
+            this.play();
+        }
+
+
   render() {
     return (
+
       <section className="album">
       <section id="album-info">
       <img id="album-cover-art" src={this.state.album.albumCover}
@@ -97,6 +124,13 @@ class Album extends Component {
 
           </tbody>
          </table>
+         <PlayerBar
+                  isPlaying={this.state.isPlaying}
+                  currentSong={this.state.currentSong}
+                  handleSongClick={() => this.handleSongClick(this.state.currentSong)}
+                  handlePrevClick={() => this.handlePrevClick()}
+                  handleNextClick={() => this.handleNextClick()}
+                />
         </section>
     );
   }
