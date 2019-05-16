@@ -134,7 +134,19 @@ class Album extends Component {
            <div id="release-info">release info:  {this.state.album.releaseInfo}</div>
                  </div>
                  </section>
+                 <PlayerBar
+                            isPlaying={this.state.isPlaying}
+                            currentSong={this.state.currentSong}
+                            currentTime={this.audioElement.currentTime}
+                            duration={this.audioElement.duration}
+                            handleSongClick={() => this.handleSongClick(this.state.currentSong)}
+                            handlePrevClick={() => this.handlePrevClick()}
+                            handleNextClick={() => this.handleNextClick()}
+                            handleTimeChange={(e) => this.handleTimeChange(e)}
+                            handleVolumeChange={ (e) => this.handleVolumeChange(e)}
+                            formatTime={(time) => this.formatTime(time)}
 
+                          />
          <table id="song-list">
            <colgroup>
              <col id="song-number-column" />
@@ -148,7 +160,7 @@ class Album extends Component {
                   onMouseEnter={() => this.onMouseEnter(index)}
                   onMouseLeave={() => this.OnMouseLeave(index)} >
             <td>
-           <button>
+           <button >
            {
              (this.state.currentSong.title=== song.title) ?
               <span className={this.state.isPlaying ? "ion-pause": "ion-play"}></span>
@@ -167,19 +179,7 @@ class Album extends Component {
         )}
       </tbody>
    </table>
-       <PlayerBar
-                  isPlaying={this.state.isPlaying}
-                  currentSong={this.state.currentSong}
-                  currentTime={this.audioElement.currentTime}
-                  duration={this.audioElement.duration}
-                  handleSongClick={() => this.handleSongClick(this.state.currentSong)}
-                  handlePrevClick={() => this.handlePrevClick()}
-                  handleNextClick={() => this.handleNextClick()}
-                  handleTimeChange={(e) => this.handleTimeChange(e)}
-                  handleVolumeChange={ (e) => this.handleVolumeChange(e)}
-                  formatTime={(time) => this.formatTime(time)}
 
-                />
         </section>
     );
   }
